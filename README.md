@@ -25,6 +25,7 @@ ini adalah tautan Repositori Untuk mengakses Sumber materi yang telah dipelajari
 ### Prasyarat
 - Koneksi internet yang stabil.
 - Software **R** dan **RStudio** telah terinstal di perangkat Anda
+- sebelumnya load dahulu packages ("parallel") dengan cara library(parallel)
 
 ### Langkah-langkah menjalankan project
 
@@ -32,11 +33,10 @@ ini adalah tautan Repositori Untuk mengakses Sumber materi yang telah dipelajari
     Gunakan tombol hijau "▼ Code" di kanan atas, lalu pilih "Download ZIP" untuk mengunduh semua materi sekaligus ke komputer Anda.
 
 2.  **buka Folder Repositori**
-Tekan atau unduh folder yang telah berisikan file code R, atau yang berbentuk HTML
+Tekan atau unduh folder yang telah berisikan file code R dengan file  `.Rmd (R Markdown)` atau  `.html`
 
-    
 3.  **Jalankan Kode di RStudio**
-    Buka file `.Rmd` atau `.HTML` yang telah Anda unduh menggunakan RStudio untuk melihat dan menjalankan kode implementasi algoritma secara langsung.
+    Buka file `.Rmd` atau `.HTML` yang telah Anda unduh menggunakan RStudio untuk melihat dan menjalankan kode implementasi algoritma secara langsung.cara menjalankannya ialah dengan menyalin code dan menginput kasus dari file lalu tekan Run atau bisa dengan ctrl + Enter.
     
 ## 👨‍🏫 Dosen Pengampu Mata Kuliah Algoritma dan Pemrograman
 
@@ -55,4 +55,5 @@ Tekan atau unduh folder yang telah berisikan file code R, atau yang berbentuk HT
   
 
     
+
 
