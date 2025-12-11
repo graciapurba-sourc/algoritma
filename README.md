@@ -6,7 +6,7 @@ Mengenai penjelasan Materi dari Mata Kuliah yang sudah dipelajari dilengkapi den
 
 ## 🔗 **Link Utama: Referensi**
 ini adalah tautan Repositori Untuk mengakses Sumber materi yang telah dipelajari  
-**[Referensi Materi](https://github.com/ferdianwijayabangkit/algoritma_pemrograman_perkuliahan/blob/main/README.md?plain=1)**
+**[Referensi Materi](https://github.com/ferdianwijayabangkit/algoritma_pemrograman_perkuliahan)**
 
 ## 👩🏻‍🏫 Isi Repositori
 
@@ -55,5 +55,6 @@ Tekan atau unduh folder yang telah berisikan file code R dengan file  `.Rmd (R M
   
 
     
+
 
 
