@@ -1,0 +1,782 @@
+---
+title: "Mini Project Algoritma Pemrograman"
+author: "kelompok 6
+  (
+Gracia Elkriza Purba(036),
+Rindu Rosaura(046),
+Sydney Rahmah Syafira(001) )"
+date: "2025-12-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **DIVIDE, CONQUER, COMBINE**
+
+Divide and Conquer adalah strategi algoritma yang memecah masalah besar menjadi sub-masalah yang lebih kecil dan identik, menyelesaikannya secara rekursif (proses Conquer), lalu menggabungkan solusi-solusi kecil tersebut menjadi solusi akhir (proses Combine).
+
+##  **1.Branching Factor**
+
+Branching factor adalah jumlah sub-bagian yang dihasilkan saat memecah masalah menjadi bagian-bagian
+yang lebih kecil pada langkah Divide.
+Semakin banyak bagian yang dihasilkan pada setiap langkah, semakin tinggi Branching Factor-nya
+Sintaks Branching Factor pada R
+```{r branching factor}
+data <- c(8, 2, 5, 6, 9, 1, 4, 3, 7)
+branching_factor <- 3
+split_size <- ceiling(length(data) / branching_factor)
+sub_arrays <- split(data, ceiling(seq_along(data) / split_size))
+print(sub_arrays)
+```
+
+
+
+##  **2.Balance**
+Balance berarti memecah masalah menjadi bagian-bagian yang seimbang (dalam hal jumlah
+elemen atau kompleksitasnya) pada langkah Divide.
+Pembagian yang seimbang membantu memastikan bahwa proses di setiap sub-bagian
+memiliki beban yang merata, sehingga meningkatkan efisiensi.
+Ketika array ganjil dibagi secara balance, perbedaan jumlah elemen antara bagian-bagian
+yang dihasilkan tidak boleh lebih dari 1 elemen.
+Sintaks Balance pada R
+```{r balance}
+array <- c(10, 4, 7, 2, 8)
+n <- length(array)
+mid <- ceiling(n / 2)
+
+left <- array[1:mid]
+right <- array[(mid+1):n]
+
+print(left)
+print(right)
+```
+
+##  **3.Data Dependence of Divide Function**
+Pada konsep ini, cara membagi masalah (pada langkah Divide) bergantung pada nilai-nilai
+data yang ada.
+Artinya, pembagian tidak hanya didasarkan pada jumlah elemen, tetapi juga bergantung
+pada nilai atau sifat data tersebut
+Sintaks Data Dependence of Divide Function pada R
+```{r Data Dependence of Divide Function}
+arr <- c(12, 5, 3, 8, 15, 1, 10)
+pivot <- 8
+left <- arr[arr < pivot]
+right <- arr[arr >= pivot]
+print(left)
+print(right)
+```
+
+##  **4.Control Parallelism**
+Pendekatan yang memungkinkan bagian-bagian dari masalah diproses secara
+bersamaan (paralel) setelah dibagi.
+Tujuannya adalah meningkatkan kecepatan pemrosesan dengan memanfaatkan sumber
+daya komputasi secara bersamaan.
+```{r Control Parallelism}
+library(parallel)
+data <- c(2, 4, 6, 8)
+chunks <- list(c(2, 4), c(6, 8))
+cl <- makeCluster(2)
+partial_sum <- parLapply(cl, chunks, sum)
+total_sum <- sum(unlist(partial_sum))
+stopCluster(cl)
+cat("Hasil penjumlahan paralel:", total_sum)
+```
+
+##  **5. Sequentially** 
+adalah pendekatan yang memproses bagian-bagian dari masalah secara berurutan, satu per
+satu, setelah dibagi.
+Sintaks Sequentially pada R
+```{r sequentially}
+data <- c(2, 4, 6, 8)
+total <- 0
+for (x in data) {
+  total <- total + x
+  cat("Menambahkan:", x, "Total sementara:", total, "\n")
+}
+cat("Total akhir secara sequential:", total)
+```
+
+
+# **Metode Sorting**
+
+Sorting adalah metode untuk menyusun atau mengurutkan sekumpulan elemen ke dalam urutan tertentu.
+Sorting terbagi atas:
+
+##  **1. Comparison Sort**
+ialah Metode yang Menggunakan perbandigan antar elemen untuk mengurutkan.Comparison sort ini terbagi atas:
+
++ **bubble sort**
+(membandingkan elemen ke elemen berikutnya dan menukar posisinya jika urutannya salah dan di ulang hingga semua elemen terurut)
+
+Sintaks bubble Sort pada R
+```{r bubble_sort}
+bubble_sort <- function(data) {
+  n <- length(data)
+  for (i in 1:(n-1)) {
+    for (j in 1:(n-i)) {
+      if (data[j] > data[j+1]) {
+        temp <- data[j]
+        data[j] <- data[j+1]
+        data[j+1] <- temp
+      }
+    }
+  }
+  return(data)
+}
+```
+
+Contoh
+```{r contoh}
+angka<- c(7,5,1,9,3)
+bubble_sort(angka)
+```
+
++ **selection sort**
+(Memilih elemen terkecil pada bagian tidak terurut lallu menempatkan di posisi yang sesuai di agian terurut)
+
+Sintaks Selection Sort pada R
+```{r selection_sort}
+selection_sort <- function(data) {
+  n <- length(data)
+  for (i in 1:(n-1)) {
+    min_index <- i
+    for (j in (i+1):n) {
+      if (data[j] < data[min_index]) {
+        min_index <- j
+      }
+    }
+    if (min_index != i) {
+      temp <- data[i]
+      data[i] <- data[min_index]
+      data[min_index] <- temp
+    }
+  }
+  return(data)
+}
+```
+Contoh
+```{r selection}
+angka<- c(7,5,1,9,3)
+selection_sort(angka)
+```
+
++ **insertion sort**
+(Mmeasukkan tiap elemenke posisi yang benar di bagian array terurut)
+
+Sintaks insertion Sort pada R
+```{r insertion_sort}
+insertion_sort <- function(data) {
+  for (i in 2:length(data)) {
+    key <- data[i]
+    j <- i - 1
+    while (j > 0 && data[j] > key) {
+      data[j+1] <- data[j]
+      j <- j - 1
+    }
+    data[j+1] <- key
+  }
+  return(data)
+}
+```
+Contoh
+```{r cnth insertion}
+angka<- c(10,5,1,9,3)
+insertion_sort(angka)
+```
+
++ **Merge Sort**
+(membagi dua array secara rekursif kemudian menggabungkan kembali secara teerurut)
+
+Sintaks Merge Sort pada R
+```{r Merge_sort}
+merge_sort <- function(data) {
+  if (length(data) <= 1) return(data)
+  mid <- floor(length(data) / 2)
+  left <- merge_sort(data[1:mid])
+  right <- merge_sort(data[(mid+1):length(data)])
+  return(merge(left, right))
+}
+
+merge <- function(left, right) {
+  sorted <- c()
+  while (length(left) > 0 && length(right) > 0) {
+    if (left[1] <= right[1]) {
+      sorted <- c(sorted, left[1])
+      left <- left[-1]
+    } else {
+      sorted <- c(sorted, right[1])
+      right <- right[-1]
+    }
+  }
+  return(c(sorted, left, right))
+}
+
+```
+Contoh
+```{r merge}
+angka<- c(10,20,5,2,1,7,9,3)
+merge_sort(angka)
+```
+
++ **Quick Sort**
+(Memilih elemen pivot lalu membagi array berdasarkan elemen pivot dan megulang secara rekursif)
+
+Sintaks Quick Sort pada R
+```{r Quick_sort}
+quick_sort <- function(arr) {
+  if (length(arr) <= 1) return(arr)
+  pivot <- arr[length(arr)]
+  left <- arr[arr < pivot]
+  right <- arr[arr > pivot]
+  middle <- arr[arr == pivot]
+  return(c(quick_sort(left), middle, quick_sort(right)))
+}
+```
+Contoh
+```{r quick}
+angka<- c(19,0,4,7,8,3,4)
+quick_sort(angka)
+```
+
+##  **2. Non- Comparison Sort**
+ialah Algoritma yang mengurutkan Elemen tanpa mebandingkan antar elemen secara langsung.
+
+Non-Comparison sort ini terbagi atas:
+
++ **Radix sort**
+(Mengurutkan angka berdasarkan digit per digit, mulai dari digit terkecil hingga digit terbesar.Mulai dari digit satuan,puluhan ratusan,dst.)
+
+Sintaks Radix Sort pada R
+```{r Radix_sort}
+radix_sort <- function(arr) {
+  max_val <- max(arr)
+  exp <- 1
+  while (max_val %/% exp > 0) {
+    buckets <- vector("list", 10)
+    for (x in arr) {
+      digit <- (x %/% exp) %% 10
+      buckets[[digit + 1]] <- c(buckets[[digit + 1]], x)
+    }
+    arr <- unlist(buckets)
+    exp <- exp * 10
+  }
+  return(arr)
+}
+```
+Contoh
+```{r radix}
+angka<- c(170,45,75,90,802,24,2,66)
+radix_sort(angka)
+```
+
+
++ **Counting sort**
+(Menggunakan array tambahan untuk menghitung frekuensi setiap elemen menenmpakan elemen tersebut ke posisi yang tepat sesuai jumlahya)
+
+Sintaks counting Sort pada R
+```{r counting_sort}
+counting_sort <- function(arr) {
+  max_val <- max(arr)
+  count <- numeric(max_val + 1)
+  output <- numeric(length(arr))
+
+  for (x in arr) count[x + 1] <- count[x + 1] + 1
+  for (i in 2:length(count)) count[i] <- count[i] + count[i-1]
+  for (i in seq(length(arr), 1)) {
+    output[count[arr[i] + 1]] <- arr[i]
+    count[arr[i] + 1] <- count[arr[i] + 1] - 1
+  }
+  return(output)
+}
+```
+Contoh
+```{r kasus counting}
+angka<- c(5,3,1,5,3,1,1)
+counting_sort(angka)
+```
+# **Metode Searching**
+
+Searching adalah metode untuk menemukan sebuah keberadaan atau bagian (target/key) tertentu di dalam sekumpulan data.
+Searching terbagi atas:
+
+##  **1.Unsorted Search**
+Algotitma yang mencari data tanpa memerlukan data dalam kondisi terurut, tugasnya memeriksa data satu-persatu.
+Unsorted Search terbagi atas:
+
++ **Sequential Search**
+(Mencari Elemen Dengan memeriksa setiap data secara berurutan satu persatu dari aawal hingga akhir.)
+
+Sintaks sequential search pada R
+```{r sequential_search}
+seq_search <- function(data, target) {
+  for (i in 1:length(data)) {
+    if (data[i] == target) {
+      return(i - 1)  # indeks berbasis 0
+    }
+  }
+  return(NA)
+}
+
+
+```
+
+contoh data
+```{r cnth seq}
+data <- c(7,5,1,9,8,3,6)
+target <- 9
+hasil <- seq_search(data,target)
+
+```
+
+sintaks hasil
+```{r output}
+if (!is.na(hasil)) {
+  cat("Elemen", target, "ditemukan pada indeks ke-", hasil)
+} else {
+  cat("Elemen tidak ditemukan.")
+}
+```
+
+
+
++ **Hash Table Search**
+(Menggunakan Fungsi Hash Untuk menghitung indeks (posisi)data secara langsung, memungkinkan pencaarian instan tanpa membandingkan)
+
+Sintaks hash table search pada R
+```{r hash_table_search}
+# Fungsi hash
+hash_function <- function(key, size) {
+  return((key %% size) + 1)
+}
+
+# Buat hash table
+create_hash_table <- function(size) {
+  table <- vector("list", size)
+  return(table)
+}
+
+# Insert
+hash_insert <- function(table, key) {
+  index <- hash_function(key, length(table))
+  
+  if (is.null(table[[index]])) {
+    table[[index]] <- list(key)
+  } else {
+    table[[index]] <- append(table[[index]], list(key))
+  }
+  
+  return(table)
+}
+
+# Search dengan output indeks dan kalimat
+hash_search_verbose <- function(table, key) {
+  index <- hash_function(key, length(table))
+  bucket <- table[[index]]
+  
+  if (is.null(bucket)) {
+    return(paste0(key, " tidak ditemukan di hash table"))
+  }
+  
+  if (key %in% unlist(bucket)) {
+    return(paste0(key, " ditemukan di indeks ", index))
+  } else {
+    return(paste0(key, " tidak ditemukan di hash table"))
+  }
+}
+
+```
+Contoh data
+```{r data hash}
+data_vec <- c(7, 5, 1, 9, 3, 14)
+target <- 9
+```
+sintaks hasil
+```{r output hash}
+# Buat hash table
+ht <- create_hash_table(10)
+
+# Insert semua nilai
+for (val in data_vec) {
+  ht <- hash_insert(ht, val)
+}
+
+# Search dengan output lokasi indeks
+result <- hash_search_verbose(ht, target)
+print(result)
+
+```
+Note:
++ Untuk nilai 9, hasil hashing:
+index = (9 %% 10) + 1 = 10
+sehingga muncul output: "9 ditemukan di indeks 10"
+
+
++ **Binary Search Tree (BST) Search**
+(Mencari data dengan menelusuri struktur pohon,bergerak ke cabang kiri (nilai lebih kecil)atau kanan(nilai lebih besar))
+
+Sintaks BST pada R
+```{r BST_sort}
+# Membuat node BST
+create_node <- function(key) {
+  list(
+    key = key,
+    left = NULL,
+    right = NULL
+  )
+}
+
+# Insert ke BST
+bst_insert <- function(root, key) {
+  if (is.null(root)) {
+    root <- create_node(key)
+  } else if (key < root$key) {
+    root$left <- bst_insert(root$left, key)
+  } else if (key > root$key) {
+    root$right <- bst_insert(root$right, key)
+  }
+  return(root)
+}
+
+# Search dengan output jejak indeks
+bst_search_verbose <- function(root, key, path = "root") {
+  if (is.null(root)) {
+    return(paste0(key, " tidak ditemukan"))
+  }
+  
+  if (key == root$key) {
+    return(paste0(key, " ditemukan di ", path))
+  }
+  
+  if (key < root$key) {
+    return(bst_search_verbose(root$left, key, paste0(path, " -> kiri")))
+  }
+  
+  return(bst_search_verbose(root$right, key, paste0(path, " -> kanan")))
+}
+
+```
+Contoh Data
+```{r DATA BST}
+data_vec <- c(8, 10, 3, 14, 6, 1, 7, 4)
+target <- 7
+```
+Sintaks hasil
+```{r sbst}
+# Bangun BST
+root <- NULL
+for (val in data_vec) {
+  root <- bst_insert(root, val)
+}
+
+# Pencarian target
+result <- bst_search_verbose(root, target)
+print(result)
+```
+Gambaran  BST
+
+           8
+        /     \
+       3       10
+     /  \        \
+    1    6        14
+        /  \
+       4    7
+
+
+
+##  **2. Sorted Search **
+Ialah Algoritma yang memanfaatkan data yang sudah terurut untuk menemukan data,seringkali membuang sebagian besar daa disetiap langkah
+
+Sorted Search ini terbagi atas:
+
++ **Binary Search**
+(metode pencarian yang hanya bisa digunakan jika data sudah dalam keadaan terurut. Cara kerjanya membagi data menjadi dua bagian, lalu memeriksa nilai tengah dan membandingkannya dengan nilai yang dicari. Jika nilai yang dicari lebih kecil dari nilai tengah, pencarian dilanjutkan ke bagian kiri; jika lebih besar, pencarian berlanjut ke bagian kanan)
+
+Sintaks Binary Search pada R
+```{r Binary search}
+binary_search <- function(data, target) {
+  left <- 1
+  right <- length(data)
+
+  while (left <= right) {
+    mid <- floor((left + right) / 2)
+
+    if (data[mid] == target) {
+      return(mid - 1)   # indeks 0-based
+    } else if (data[mid] < target) {
+      left <- mid + 1
+    } else {
+      right <- mid - 1
+    }
+  }
+
+  return(NA)
+}
+```
+Contoh
+```{r binary}
+data <- c(13,3,5,9,7,1,11)
+target <- 3
+data_sorted <- sort(data)#data harus terurut
+hasil <- binary_search(data_sorted,target)
+
+```
+sintaks output
+```{r output binary}
+cat("Data terurut:", data_sorted, "\n")
+if (!is.na(hasil)) {
+  cat("Target", target, "berada pada indeks ke-", hasil)
+} else {
+  cat("Data tidak ditemukan.")
+}
+```
+
+
++ **Interpolation Search**
+(Menebak Posisi elemen secara cerdas pada data terurut dengan asumsi data terdistribusi seragam (bukan sekedar membelah tengah))
+
+Sintaks Interpolation Search pada R
+
+```{r Interpolation Search}
+interpolation_search <- function(vec, target) {
+  
+  low <- 1
+  high <- length(vec)
+  
+  while (low <= high && target >= vec[low] && target <= vec[high]) {
+    
+    pos <- low + as.integer(
+      ((target - vec[low]) * (high - low)) /
+      (vec[high] - vec[low])
+    )
+    if (vec[pos] == target) {
+      return(paste0(target, " ditemukan pada indeks ", pos))
+    }
+    if (vec[pos] < target) {
+      low <- pos + 1
+    } else {
+      high <- pos - 1
+    }
+  }
+  return(paste0(target, " tidak ditemukan"))
+}
+```
+Contoh:
+
+```{r data interpolation}
+vec <- c(10,20,30,40,50,60,70,80,90,100)
+target <- 90
+interpolation_search(vec, target)
+
+```
+
++ **Jump Search**
+(Mencari pada data terurut dengan "Melompat"maju dalam interval tetap (block),lalu melakukan pencarian berurutan di dalam blok yang relevan)
+
+Sintaks Jump search pada R
+```{r JUMP SEARCH}
+jump_search <- function(vec, target) {
+  
+  n <- length(vec)
+  step <- as.integer(sqrt(n))
+  prev <- 1
+  
+  # Melompat sampai nilai melebihi target
+  while (prev <= n && vec[min(step, n)] < target) {
+    prev <- step
+    step <- step + as.integer(sqrt(n))
+    
+    if (prev > n) {
+      return(paste0(target, " tidak ditemukan"))
+    }
+  }
+  
+  # Linear search dalam blok
+  for (i in prev:min(step, n)) {
+    if (vec[i] == target) {
+      return(paste0(target, " ditemukan pada indeks ", i))
+    }
+  }
+  
+  return(paste0(target, " tidak ditemukan"))
+}
+
+```
+
+Contoh:
+```{r data jump}
+vec <- c(1,3,5,7,9,11,13,15,19,21,23,25,27,29,31)
+target <- 27
+jump_search(vec, target)
+```
+
+
+# **Metode Greedy**
+Metode Greedy adalah teknik pemecahan masalah dengan cara memilih keputusan terbaik secara lokal pada setiap langkah, dengan harapan menghasilkan solusi global yang optimal. Keputusan yang sudah diambil tidak dapat diubah kembali.
+
+##  **1. Greedy : Optimal Storage on Tapes**
+Tujuannya bukan sekadar "menyimpan data"
+, melainkan meminimalkan Waktu
+Akses Rata-Rata atau Mean Retrieval Time (MRT).
+Kita ingin mencari permutasi (urutan) penyimpanan i(1), i(2), ... , i(n) sedemikian
+rupa sehingga rata-rata waktu tunggu pengguna menjadi sekecil mungkin.
+Sintaks Greedy : Optimal Storage on Tapes pada R
+```{r Greedy : Optimal Storage on Tapes}
+set.seed(123)
+files <- c(5.2, 1.7, 3.9, 2.4, 4.3, 1.1)
+capacity <- 8
+
+find_combinations <- function(files, capacity) {
+  valid <- list()
+  
+  subsets <- unlist(lapply(1:length(files), function(k) {
+    combn(files, k, simplify = FALSE)
+  }), recursive = FALSE)
+  
+  for (subset in subsets) {
+    if (sum(subset) <= capacity) {
+      valid <- append(valid, list(subset))
+    }
+  }
+  
+  return(valid)
+}
+
+# PANGGIL
+comb_res <- find_combinations(files, capacity)
+
+# CETAK KOMBINASI
+cat("=== KOMBINASI FILE <= 100 GB ===\n")
+
+for (i in seq_along(comb_res)) {
+  cat("Disk", i, ": ", paste(comb_res[[i]], collapse=", "), 
+      " (total:", sum(comb_res[[i]]), "GB)\n")
+}
+```
+
+##  **2.Greedy : Knapsack Problem**
+Tujuannya adalah Maksimasi Profit (Keuntungan).
+Kita ingin mengisi ransel sedemikian rupa sehingga total nilai (p) setinggi mungkin,
+dengan syarat total berat (w) tidak melebihi kapasitas (M).
+Data Greedy : Knapsack Problem
+```{r data greedy knapsack}
+set.seed(123)
+items <- data.frame(
+  Barang = c("Powebank", "Jaket Trbal", "Makanan Instan", "Tenda Mini", "Sarung Tangan", "Senter"),
+  Berat  = c(0.8, 2.5, 1.2, 3.0, 0.4, 0.6),
+  Nilai  = c(12, 20, 9, 25, 5, 7)
+)
+capacity <- 5
+
+```
+
+##  **FUNGSI GREEDY BY DENSITY (nilai per berat)**
+Sintaks Greedy by Density pada R
+```{r data greedy by density}
+greedy_by_density <- function(items, capacity) {
+  items$Density <- items$Nilai / items$Berat
+  items <- items[order(-items$Density), ]
+  
+  current_weight <- 0
+  current_value  <- 0
+  selected_items <- character(0)
+  
+  for (i in seq_len(nrow(items))) {
+    if (current_weight + items$Berat[i] <= capacity) {
+      current_weight <- current_weight + items$Berat[i]
+      current_value  <- current_value + items$Nilai[i]
+      selected_items <- c(selected_items, items$Barang[i])
+    }
+  }
+  
+  return(list(selected = selected_items,
+              weight   = current_weight,
+              value    = current_value,
+              table    = items))
+}
+#PANGGIL FUNGSI
+res_density <- greedy_by_density(items, capacity)
+# CETAK OUTPUT
+cat("=== GREEDY BY DENSITY (VALUE / WEIGHT) ===\n")
+cat("Urutan density:\n")
+print(res_density$table[, c("Barang","Berat","Nilai","Density")])
+cat("\nBarang dipilih: ", paste(res_density$selected, collapse=", "), "\n")
+cat("Total berat: ", res_density$weight, "kg\n")
+cat("Total nilai: ", format(res_density$value, big.mark="."), "\n")
+```
+
+##  **FUNGSI GREEDY BY PROFIT**
+Sintaks Greedy by Profit pada R
+```{r data greedy by profit}
+greedy_by_profit <- function(items, capacity) {
+  items <- items[order(-items$Nilai), ]
+  
+  current_weight <- 0
+  current_value  <- 0
+  selected_items <- character(0)
+  
+  for (i in seq_len(nrow(items))) {
+    if (current_weight + items$Berat[i] <= capacity) {
+      current_weight <- current_weight + items$Berat[i]
+      current_value  <- current_value + items$Nilai[i]
+      selected_items <- c(selected_items, items$Barang[i])
+    }
+  }
+  
+  return(list(selected = selected_items,
+              weight   = current_weight,
+              value    = current_value))
+}
+
+# PANGGIL FUNGSI
+res_profit <- greedy_by_profit(items, capacity)
+
+# CETAK HASIL
+cat("=== GREEDY BY PROFIT ===\n")
+cat("Barang dipilih: ", paste(res_profit$selected, collapse=", "), "\n")
+cat("Total berat: ", res_profit$weight, "kg\n")
+cat("Total nilai: ", format(res_profit$value, big.mark="."), "\n")
+
+```
+
+##  **FUNGSI GREEDY BY WEIGHT**
+Sintaks Greedy by Weight pada R
+```{r data greedy by weight}
+greedy_by_weight <- function(items, capacity) {
+  items <- items[order(items$Berat), ]
+  
+  current_weight <- 0
+  current_value  <- 0
+  selected_items <- character(0)
+  
+  for (i in seq_len(nrow(items))) {
+    if (current_weight + items$Berat[i] <= capacity) {
+      current_weight <- current_weight + items$Berat[i]
+      current_value  <- current_value + items$Nilai[i]
+      selected_items <- c(selected_items, items$Barang[i])
+    }
+  }
+  
+  return(list(selected = selected_items,
+              weight   = current_weight,
+              value    = current_value))
+}
+
+# PANGGIL FUNGSI
+res_weight <- greedy_by_weight(items, capacity)
+
+# CETAK HASIL
+cat("=== GREEDY BY WEIGHT ===\n")
+cat("Barang dipilih: ", paste(res_weight$selected, collapse=", "), "\n")
+cat("Total berat: ", res_weight$weight, "kg\n")
+cat("Total nilai: ", format(res_weight$value, big.mark="."), "\n")
+```
+
+
+
+
+
+
+
